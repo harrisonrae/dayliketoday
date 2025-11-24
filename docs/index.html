@@ -13,6 +13,11 @@
       background: #ffffff;
     }
 
+    /* iPhone / Mobile Safari fixes */
+    html, body {
+      -webkit-text-size-adjust: 100%; /* prevent font autoscaling */
+    }
+
     h1 {
       margin-top: 30px;
       font-size: 2rem;
@@ -45,6 +50,7 @@
       color: rgb(213, 233, 255);
       user-select: none;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     #left { left: -40px; }
@@ -59,17 +65,34 @@
       white-space: nowrap;
       font-size: 1.4rem;
       font-weight: bold;
+      /* respect iPhone home indicator / notch */
+      padding-bottom: constant(safe-area-inset-bottom);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
    #scrollText span {
   display: inline-block;
-  padding-left: 10vw; /* Start just off the left edge */
-  animation: scroll 150s linear;
+  padding-left: 6vw; /* start just off left edge so it appears quickly */
+  /* use a CSS variable for easy tuning */
+  --scroll-duration: 150s;
+  -webkit-animation: scroll var(--scroll-duration) linear;
+  animation: scroll var(--scroll-duration) linear;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
+
+/* vendor-prefixed keyframes for iOS Safari */
+@-webkit-keyframes scroll {
+  0% { -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
+  100% { -webkit-transform: translate3d(-100%,0,0); transform: translate3d(-100%,0,0); }
 }
 
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% { -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
+  100% { -webkit-transform: translate3d(-100%,0,0); transform: translate3d(-100%,0,0); }
 }
   </style>
 </head>
@@ -119,11 +142,15 @@
       const scrollSpan = document.querySelector("#scrollText span");
       scrollSpan.textContent = scrollTexts[index] + " ";
 
-      // Restart animation
-      scrollSpan.style.animation = "none";
-      // Force reflow
+      // Restart animation in a way that works reliably in Mobile Safari
+      scrollSpan.style.webkitAnimation = 'none';
+      scrollSpan.style.animation = 'none';
+      // force reflow
       void scrollSpan.offsetWidth;
-      scrollSpan.style.animation = "";
+      // re-start with explicit properties (so iOS picks up the change)
+      const duration = getComputedStyle(scrollSpan).getPropertyValue('--scroll-duration').trim() || '150s';
+      scrollSpan.style.webkitAnimation = `scroll ${duration} linear`;
+      scrollSpan.style.animation = `scroll ${duration} linear`;
     }
 
     document.getElementById("left").onclick = () => {

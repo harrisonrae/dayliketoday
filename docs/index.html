@@ -23,7 +23,7 @@
   position: relative;
   width: 100%;
   max-width: 420px;
-  margin: 30px auto;
+  margin: 70px auto;
   height: 380px;     /* FIXED HEIGHT */
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@
       transform: translateY(-50%);
       font-size: 3rem;
       font-weight: bold;
-      color: black;
+      color: rgb(213, 233, 255);
       user-select: none;
       cursor: pointer;
     }
@@ -63,15 +63,14 @@
 
    #scrollText span {
   display: inline-block;
-  padding-left: 100%;
-  animation: scroll 120s linear infinite;
+  padding-left: 10vw; /* Start just off the left edge */
+  animation: scroll 150s linear;
 }
 
-
-   @keyframes scroll {
-  0% { transform: translateX(100%); }
+@keyframes scroll {
+  0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
-    }
+}
   </style>
 </head>
 <body>
@@ -106,8 +105,8 @@
 
     const scrollTexts = [
       "Kim Jong-nam, the eldest son of former North Korean leader Kim Jong-il, was killed in an attack at Malaysia’s low-cost carrier airport, klia2, at around 9:00 a.m. on February 13, 2017. He was scheduled to take a flight to Macau later that morning. Two women, Vietnamese Doan Thi Huong (twenty-eight) and Indonesian Siti Aisyah (twenty-five), were allegedly asked to wipe baby oil on Jong-nam’s face, and were paid $90 for this reality-TV prank. However, twenty minutes after the attack—which was caught on airport security CCTV—Jong-nam was dead. The autopsy identified the “baby oil” as the deadly nerve agent VX. Several North Korean male suspects, said to have been watching when the attack was carried out, all fled the country on the same day. Soon after the murder, an image was publically released.",
-      "In 1880, Shelford Bidwell asked himself: what if a picture could be broken into pure information and transmitted as an electronic signal? Shelford Bidwell was a researcher who specialised in selenium. He found that selenium did strange things when light shone on it. If a selenium cell was wired into a simple electrical circuit, with a battery that sent small electrical currents down a wire, it would cause greater or lesser resistance when reacting to direct light. This meant that Bidwell could generate electrical patterns. When no light shone on the selenium cell, a surge of electricity wound its way around the circuit. When light did shine on it, the resistance increased and only a small current was present. By varying the light, he could generate a Morse code-like intermittent signal. Bidwell thought this could be used to transmit visual information. To test his idea, Bidwell built two machines, a transmitter and a receiver. Then he painted two simple pictures—black and white silhouettes of a butterfly and a horse. These images are the building blocks for an architecture of surveillance, used to monitor populations. As governments seek out new sources of revenue in an era of downsizing, and as capital searches out new domains of everyday life to bring into its sphere, the ability to use automated imaging and sensing to extract wealth from smaller and smaller slices of everyday life is irresistible. The relationship between images and power in the machine-machine landscape is different than in the human visual landscape. The former comes from the enactment of two seemingly paradoxical operations. The first move is the individualization and differentiation of the people, places, and everyday lives of the landscapes under its purview--it creates a specific metadata signature of every single person based on race, class, the places they live, the products they consume, their habits, interests, “likes,” friends, and so on. The second move is to reify those categories, removing any ambiguities in their interpretation so that individualized metadata profiles can be operationalized to collect municipal fees, adjust insurance rates, conduct targeted advertising, prioritize police surveillance, and so on. The overall effect is a society that amplifies diversity (or rather a diversity of metadata signatures) but does so precisely because the differentiations in metadata signatures create inroads for the capitalization and policing of everyday life. So why is it necessary to look at Bidwell's horse and butterfly? Because we must begin to understand that from the starting point of this telephotographic experiment, machine-generated images have evolved into a sinister technology. We must see these changes if we are to challenge the exceptional forms of power flowing through the invisible visual culture of contemporary machine-generated images that we find ourselves enmeshed within.",
-      "The second image that Bidwell painted and used for his telephotographic experiment was this horse. In painting these myself I wonder 'what does it mean for someone to take a photo of these bricks with their smartphone?' I wonder this because in painting the butterfly and the horse I am reproducing a history. In the viewer participating with their phone they are also a part of reproducing this history of machine-generated images. But I'm not sure what this means. 'Am I doing something that is worthwhile?' That is a question I think about when looking back on reproducing these machine generated images.",
+      "In 1880, Shelford Bidwell asked himself: what if a picture could be broken into pure information and transmitted as an electronic signal? Bidwell found that if a selenium cell was wired into a simple electrical circuit, with a battery that sent small electrical currents down a wire, it would cause greater or lesser resistance when reacting to direct light. This meant that Bidwell could generate electrical patterns. Bidwell thought this could be used to transmit visual information. To test his idea, Bidwell built two machines, a transmitter and a receiver. Then he painted two simple pictures—black and white silhouettes of a butterfly and a horse. These images are the building blocks for an architecture of surveillance, used to monitor populations.",
+      "The second image that Bidwell painted and used for his telephotographic experiment was this horse. In painting these myself I wonder 'what does it mean for someone to take a photo of these bricks with their smartphone?' I wonder this because in painting the butterfly and the horse I am reproducing a history. In the viewer participating with their phone they are also a part of reproducing this history of machine-generated images. But I'm not sure what this means. 'Am I doing something that is worthwhile?' That is a question I think about when looking back on reproducing these machine-generated images.",
       "The QR code is how you got here. This is a different kind of machine-generated image. A wikipedia article traced them back to 1994; a way to store more information than a traditional barcode. I think QR codes are an interesting way to demonstrate the unconscious understanding among people that machine-generated imagges have clear demands of us. Addiionally, we mostly meet their expectations as we raise our phones to connect and decode.",
       "This is an aerial photograph taken by a drone in January 2025. The image shows displaced Palestinians returning to Rafah, a day after the ceasefire deal between Israel and Hamas came into effect. This ceasefire included countless violations, and ended officially in March later that year when Netanyahu stated that combat had resumed in full force. This drone photograph (credited to Mohammad Abu Samra of the Associated Press) is using the same technology that is surveilling, monitoring and killing the Palestinian population. This same technology is being used in the conflict between Russia and Ukraine."
     ];
@@ -117,7 +116,14 @@
     function updateImage() {
       document.getElementById("mainImage").src = images[index];
       document.getElementById("title").textContent = titles[index];
-      document.querySelector("#scrollText span").textContent = scrollTexts[index] + " ";
+      const scrollSpan = document.querySelector("#scrollText span");
+      scrollSpan.textContent = scrollTexts[index] + " ";
+
+      // Restart animation
+      scrollSpan.style.animation = "none";
+      // Force reflow
+      void scrollSpan.offsetWidth;
+      scrollSpan.style.animation = "";
     }
 
     document.getElementById("left").onclick = () => {
@@ -129,6 +135,8 @@
       index = (index + 1) % images.length;
       updateImage();
     };
+
+    
   </script>
 
 </body>

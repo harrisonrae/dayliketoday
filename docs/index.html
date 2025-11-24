@@ -94,6 +94,34 @@
   0% { -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
   100% { -webkit-transform: translate3d(-100%,0,0); transform: translate3d(-100%,0,0); }
 }
+
+/* --- ADDED: better layout for small screens so arrows stay visible --- */
+@media (max-width: 480px) {
+  #carousel {
+    max-width: calc(100% - 32px); /* leave room for arrows */
+    margin: 40px auto;
+    height: 300px; /* reduce height on small screens */
+    padding: 0 28px; /* inner space so arrows don't overlap the image */
+    box-sizing: border-box;
+  }
+
+  .arrow {
+    font-size: 2.4rem;
+    padding: 6px; /* larger hit area for touch */
+    background: rgba(0,0,0,0.18);
+    color: #fff;
+    border-radius: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  #left { left: 8px; }
+  #right { right: 8px; }
+
+  /* reduce title size and scroll text on tiny screens */
+  h1 { font-size: 1.4rem; margin-top: 16px; }
+  #scrollText { font-size: 1rem; bottom: 12px; }
+}
   </style>
 </head>
 <body>
